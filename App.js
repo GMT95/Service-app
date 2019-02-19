@@ -8,8 +8,9 @@ import { store } from "./redux/store";
 //Screens Import
 import HomeScreen from './screens/HomeScreen';
 import AddServiceScreen from './screens/AddService';
+import SignInScreen from './screens/SignInScreen'
 
-class SignInScreen extends React.Component {
+class App extends React.Component {
   state = {
     phoneNumber: '',
     phoneNumberInputScreen: false,
@@ -98,30 +99,15 @@ class SignInScreen extends React.Component {
   }
 
   render() {
-    const { phoneNumberInputScreen } = this.state
+    console.log(store.getState())
     return (
-      phoneNumberInputScreen === false ?
-        <View style={styles.container}>
-          <Text style={styles.paragraph}>Service App</Text>
-          <Button onPress={_ => this.logIn()} title="Login with facebook" color="#3a5998" />
-        </View> :
-        <View>
-          <TextInput
-            label='Phone Number'
-            keyboardType='numeric'
-            value={this.state.phoneNumber}
-            type='outlined'
-            onChangeText={text => this.setState({ phoneNumber: text })}
-            maxLength={11}
-          />
-          <Button onPress={_ => this.addUser()} title="Next" color="blue" />
-        </View>
+      <SignInScreen navigation={this.props.navigation}/>
     );
   }
 }
 
 const AppStack = createStackNavigator({ Home: HomeScreen, AddService: AddServiceScreen }, { initialRouteName: 'Home' });
-const AuthStack = createStackNavigator({ SignIn: SignInScreen });
+const AuthStack = createStackNavigator({ SignIn: App });
 
 const Navigator = createAppContainer(createSwitchNavigator(
   {
@@ -141,18 +127,18 @@ export default ReduxNav = () => {
   )
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    paddingTop: Constants.statusBarHeight,
-    backgroundColor: '#ecf0f1',
-    padding: 8,
-  },
-  paragraph: {
-    margin: 24,
-    fontSize: 18,
-    fontWeight: 'bold',
-    textAlign: 'center',
-  },
-});
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//     justifyContent: 'center',
+//     paddingTop: Constants.statusBarHeight,
+//     backgroundColor: '#ecf0f1',
+//     padding: 8,
+//   },
+//   paragraph: {
+//     margin: 24,
+//     fontSize: 18,
+//     fontWeight: 'bold',
+//     textAlign: 'center',
+//   },
+// });
