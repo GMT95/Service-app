@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { Text, View, Button, StyleSheet } from 'react-native';
 import { Constants, Expo, Facebook, Alert } from 'expo';
 import { connect } from 'react-redux';
-import {ipAddress} from '../constants'
+import {ipAddress} from '../constants';
+import { store } from '../redux/store';
 
 class LoginWithFacebook extends Component {
   async logIn() {
@@ -43,7 +44,12 @@ class LoginWithFacebook extends Component {
                   console.log(tokenKey);
                 } else {
                   console.log('User found -->', data)
+                  this.props.dispatch({
+                    type: 'SAVE_TOKEN',
+                    payload: data.token
+                  })
                   //save token
+                  console.log('After login success',store.getState())
                   this.props.navigation.navigate('App');
                 }
 

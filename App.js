@@ -1,113 +1,62 @@
 import React from 'react';
-import { Constants, Expo, Facebook, Alert } from 'expo';
 import { createStackNavigator, createSwitchNavigator, createAppContainer } from 'react-navigation';
-import { StyleSheet, Text, View, Button } from 'react-native';
-import { TextInput } from 'react-native-paper'
 import { Provider } from 'react-redux'
 import { store } from "./redux/store";
+import { Button } from 'react-native'
+import {IconButton} from 'react-native-paper'
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+
 //Screens Import
 import HomeScreen from './screens/HomeScreen';
 import AddServiceScreen from './screens/AddService';
-import SignInScreen from './screens/SignInScreen'
+import SignInScreen from './screens/SignInScreen';
+import DrawerNavigator from './screens/DrawerNavigator';
 
 class App extends React.Component {
+  static navigationOptions = {
+    header: null
+  }
+
   state = {
     phoneNumber: '',
     phoneNumberInputScreen: false,
     data: {}
   }
 
-  async addUser() {
-    const { data,phoneNumber } = this.state
-    console.log('Phone Number',phoneNumber)
-    await fetch('http://192.168.57.1:5000/users/register', {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-              fbId: data.id,
-              picture: data.picture.data.url,
-              name: data.name,
-              phoneNum: phoneNumber
-            })
-          })
-    this.props.navigation.navigate('App');      
-  }
-
-  async logIn() {
-    console.log('In Login function')
-    try {
-      const {
-        type,
-        token,
-        expires,
-        permissions,
-        declinedPermissions,
-      } = await Facebook.logInWithReadPermissionsAsync('277830099567519', {
-        permissions: ['public_profile'],
-      });
-      if (type === 'success') {
-        // Get the user's name using Facebook's Graph API
-        fetch(`https://graph.facebook.com/me?access_token=${token}&fields=id,name,picture.type(large)`)
-          .then((res) => res.json())
-          .then((tokenKey) => {
-            //AsyncStorage.setItem('userToken',JSON.stringify(tokenKey))
-            //.then(() => this.props.navigation.navigate('App'))
-            console.log(tokenKey)
-            // this.setState({ phoneNumberInputScreen: true })
-            fetch('http://192.168.57.1:5000/users/login', {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json"
-              },
-              body: JSON.stringify({
-                fbId: tokenKey.id,
-              })
-            })
-              .then(res => res.json())
-              .then(data => {
-                console.log(data.notfound)
-                if (data.notfound === true) {
-                  this.setState({ phoneNumberInputScreen: true, data: tokenKey })
-                  console.log(tokenKey);
-                  // fetch('http://192.168.57.1:5000/users/register', {
-                  //   method: "POST",
-                  //   headers: {
-                  //     "Content-Type": "application/json"
-                  //   },
-                  //   body: JSON.stringify({
-                  //     fbId: tokenKey.id,
-                  //     picture: tokenKey.picture.data.url,
-                  //     name: tokenKey.name
-                  //   })
-                  // })
-                } else {
-                  console.log('User found -->', data)
-                  this.props.navigation.navigate('App');
-                }
-
-              })
-          })
-        //_signInAsync();
-      } else {
-        // type === 'cancel'
-      }
-    } catch ({ message }) {
-      alert(`Facebook Login Error: ${message}`);
-    }
-  }
-
   render() {
     console.log(store.getState())
     return (
-      <SignInScreen navigation={this.props.navigation}/>
+      <SignInScreen navigation={this.props.navigation} />
     );
   }
 }
-
-const AppStack = createStackNavigator({ Home: HomeScreen, AddService: AddServiceScreen }, { initialRouteName: 'Home' });
+//Home: {screen: DrawerNavigator,navigationOptions: {header: null}} for no header
+const AppStack = createStackNavigator({
+  Home: {
+    screen: DrawerNavigator,
+    navigationOptions: ({navigation}) => ({
+      headerLeft: (
+        <IconButton
+          icon='menu'
+          color='blue'
+          size={25}
+          onPress={() => navigation.toggleDrawer()}
+        />  
+      ),
+      headerRight: (
+        <IconButton
+          icon="exit-to-app"
+          color='red'
+          size={25}
+          onPress={() => navigation.navigate('Auth')}
+        />
+      )
+    })
+  },
+  AddService: AddServiceScreen
+}, { initialRouteName: 'Home' });
 const AuthStack = createStackNavigator({ SignIn: App });
+
 
 const Navigator = createAppContainer(createSwitchNavigator(
   {
@@ -115,14 +64,14 @@ const Navigator = createAppContainer(createSwitchNavigator(
     Auth: AuthStack,
   },
   {
-    initialRouteName: 'Auth',
+    initialRouteName: 'App',
   }
 ));
 
 export default ReduxNav = () => {
   return (
     <Provider store={store}>
-      <Navigator/>
+      <Navigator />
     </Provider>
   )
 }

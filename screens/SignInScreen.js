@@ -7,6 +7,11 @@ import AddPhoneNum from './AddPhoneNum';
 
 
 class SignInScreen extends Component {
+  static navigationOptions = {
+    header: null
+  }
+  
+  
   render() {
     const { screenChanger } = this.props
     return (
