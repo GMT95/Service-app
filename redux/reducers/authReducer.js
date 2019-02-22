@@ -20,7 +20,8 @@ export default (state = {screenChanger: false,userData: null}, action) => {
       console.log('In GET and save reducer')
       return {
         ...state,
-        userData: action.payload
+        userData: action.payload,
+        screenChanger: false
       }  
     default:
       return state;

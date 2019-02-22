@@ -59,10 +59,10 @@ class AddPhoneNum extends Component {
         picture: picture,
         name: name,
         phoneNum: phoneNumber,
-        location: {
-          latitude: location.coords.latitude,
-          longitude: location.coords.longitude
-        } 
+        location: { 
+          type: 'Point', 
+          coordinates: [location.coords.longitude, location.coords.latitude] 
+        }
       })
     })
       .then(res => res.json())

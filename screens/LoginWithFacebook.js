@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { Text, View, Button, StyleSheet } from 'react-native';
 import { Constants, Expo, Facebook, Alert } from 'expo';
+import { Avatar,Title } from 'react-native-paper'
 import { connect } from 'react-redux';
-import {ipAddress} from '../constants';
+import { ipAddress } from '../constants';
 import { store } from '../redux/store';
 
 class LoginWithFacebook extends Component {
@@ -49,12 +50,12 @@ class LoginWithFacebook extends Component {
                     payload: data.token
                   })
                   //save token
-                  console.log('After login success',store.getState())
+                  console.log('After login success', store.getState())
                   this.props.navigation.navigate('App');
                 }
 
               })
-              .catch(e => console.log(e))
+              .catch(e => console.log(e,'eeeeeeeeeeeeeeeeeeeeeeeerororororor'))
           })
       } else {
         // type === 'cancel'
@@ -67,7 +68,12 @@ class LoginWithFacebook extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.paragraph}>Service App</Text>
+        <Title style={styles.paragraph}>Service App</Title>
+        <Avatar.Image 
+          size={200} 
+          source={{ uri: 'https://www.nth.ch/app/uploads/2015/02/inner_vas_providers.jpg' }} 
+          style={{marginLeft: "20%",marginBottom: 20}}
+        />
         <Button onPress={_ => this.logIn()} title="Login with facebook" color="#3a5998" />
       </View>
     )
@@ -87,8 +93,9 @@ const styles = StyleSheet.create({
   },
   paragraph: {
     margin: 24,
-    fontSize: 18,
+    fontSize: 30,
     fontWeight: 'bold',
     textAlign: 'center',
+    paddingBottom: 20
   },
 });

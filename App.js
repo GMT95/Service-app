@@ -7,10 +7,10 @@ import {IconButton} from 'react-native-paper'
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 //Screens Import
-import HomeScreen from './screens/HomeScreen';
 import AddServiceScreen from './screens/AddService';
 import SignInScreen from './screens/SignInScreen';
 import DrawerNavigator from './screens/DrawerNavigator';
+import GetServicesScreen from './screens/GetServices'
 
 class App extends React.Component {
   static navigationOptions = {
@@ -35,10 +35,13 @@ const AppStack = createStackNavigator({
   Home: {
     screen: DrawerNavigator,
     navigationOptions: ({navigation}) => ({
+      headerStyle: {
+        backgroundColor: '#505050',
+      },
       headerLeft: (
         <IconButton
           icon='menu'
-          color='blue'
+          color='white'
           size={25}
           onPress={() => navigation.toggleDrawer()}
         />  
@@ -46,14 +49,15 @@ const AppStack = createStackNavigator({
       headerRight: (
         <IconButton
           icon="exit-to-app"
-          color='red'
+          color='#e833e5'
           size={25}
           onPress={() => navigation.navigate('Auth')}
         />
       )
     })
   },
-  AddService: AddServiceScreen
+  AddService: AddServiceScreen,
+  GetServices: GetServicesScreen
 }, { initialRouteName: 'Home' });
 const AuthStack = createStackNavigator({ SignIn: App });
 
