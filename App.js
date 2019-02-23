@@ -2,15 +2,15 @@ import React from 'react';
 import { createStackNavigator, createSwitchNavigator, createAppContainer } from 'react-navigation';
 import { Provider } from 'react-redux'
 import { store } from "./redux/store";
-import { Button } from 'react-native'
 import {IconButton} from 'react-native-paper'
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+
 
 //Screens Import
 import AddServiceScreen from './screens/AddService';
 import SignInScreen from './screens/SignInScreen';
 import DrawerNavigator from './screens/DrawerNavigator';
-import GetServicesScreen from './screens/GetServices'
+import GetServicesScreen from './screens/GetServices';
+import OrderScreen from './screens/OrderScreen';
 
 class App extends React.Component {
   static navigationOptions = {
@@ -57,7 +57,8 @@ const AppStack = createStackNavigator({
     })
   },
   AddService: AddServiceScreen,
-  GetServices: GetServicesScreen
+  GetServices: GetServicesScreen,
+  Order: OrderScreen
 }, { initialRouteName: 'Home' });
 const AuthStack = createStackNavigator({ SignIn: App });
 
@@ -68,7 +69,7 @@ const Navigator = createAppContainer(createSwitchNavigator(
     Auth: AuthStack,
   },
   {
-    initialRouteName: 'App',
+    initialRouteName: 'Auth',
   }
 ));
 

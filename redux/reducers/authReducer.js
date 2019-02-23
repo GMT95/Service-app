@@ -22,7 +22,19 @@ export default (state = {screenChanger: false,userData: null}, action) => {
         ...state,
         userData: action.payload,
         screenChanger: false
-      }  
+      } 
+    case 'SAVE_CURRENT_LOCATION':
+    console.log('In Save current location') 
+    return {
+      ...state,
+      currentLocation: action.payload
+    } 
+    case 'ORDER_DATA':
+    console.log('In current Order Data')
+    return {
+      ...state,
+      orderData: action.payload
+    } 
     default:
       return state;
   }

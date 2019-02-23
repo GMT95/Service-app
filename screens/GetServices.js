@@ -43,19 +43,69 @@ class GetServicesScreen extends Component {
       .then(res2 => this.setState({ categoryData: res2 }))
   }
 
+  getNearByServices() {
+    const { userData, currentLocation, token } = this.props;
+
+    if (currentLocation !== null) {
+      locationBody = userData.location
+
+      fetch(`${ipAddress}/users/nearbyservices`, {
+        method: "POST",
+        headers: {
+          'x-access-token': token,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          location: locationBody
+        })
+      })
+        .then(res => res.json())
+        .then(res2 => this.setState({ categoryData: res2 }))
+    } else {
+      locationBody = {
+        type: "Point",
+        coordinates: [currentLocation.coords.longitude, currentLocation.coords.latitude]
+      }
+
+      fetch(`${ipAddress}/users/nearbyservices`, {
+        method: "POST",
+        headers: {
+          'x-access-token': token,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          location: locationBody
+        })
+      })
+        .then(res => res.json())
+        .then(res2 => this.setState({ categoryData: res2 }))
+    }
+
+  }
+
+  orderData(val) {
+    const { dispatch } = this.props
+    console.log(val)
+    dispatch({type: 'ORDER_DATA',payload: val})
+
+
+    this.props.navigation.navigate('Order')
+  }
+
 
   render() {
     const { category, categoryData } = this.state
+    console.log('useeeeeeeeeeeeeeer ddddddddddddd', this.props.userData)
     console.log(categoryData)
     return (
       <View style={styles.container}>
-        <Button 
-          onPress={() => console.log('nearby')} 
-          color="#0da133" 
+        <Button
+          onPress={() => this.getNearByServices()}
+          color="#0da133"
           mode="contained"
-          style={{marginBottom: 10}}
+          style={{ marginBottom: 10 }}
         >
-        Near by Services
+          Near by Services
         </Button>
         <Text style={{ color: 'blue', fontWeight: 'bold', fontSize: 14 }}>Search By Category</Text>
         <Picker
@@ -81,7 +131,7 @@ class GetServicesScreen extends Component {
                   </Card.Content>
                   <Card.Cover source={{ uri: val.profilePicURL }} />
                   <Card.Actions style={{ paddingLeft: '72%' }}>
-                    <Button onPress={() => console.log('Card button', index)} color="blue">Order</Button>
+                    <Button onPress={() => this.orderData(val)} color="blue">Order</Button>
                   </Card.Actions>
                 </Card>
               }) :
@@ -94,7 +144,9 @@ class GetServicesScreen extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  token: state.authReducer.savedToken
+  token: state.authReducer.savedToken,
+  currentLocation: state.authReducer.currentLocation,
+  userData: state.authReducer.userData
 })
 
 

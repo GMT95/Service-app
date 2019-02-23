@@ -1,10 +1,11 @@
 import * as React from 'react';
 import { View, StyleSheet, ActivityIndicator, Text, ScrollView } from 'react-native';
-import { Constants } from 'expo';
+import { Constants, Location, Permissions } from 'expo';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Avatar, Card, Title, Paragraph, Button } from 'react-native-paper'
 import { ipAddress } from '../constants'
 import { connect } from 'react-redux'
+
 
 class HomeScreen extends React.Component {
   static navigationOptions = {
@@ -30,8 +31,42 @@ class HomeScreen extends React.Component {
       .then(res2 => this.setState({ userServices: res2 }))
   }
 
+  showAlert = () => {
+    Alert.alert(
+      'Warning',
+      'App is based on location services please press try again to save location',
+      [
+        { text: 'Try Again', onPress: () => this.getLocationAsync() },
+        { text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
+      ],
+      { cancelable: false }
+    )
+  }
+
+
+  async getLocationAsync() {
+    const { dispatch } = this.props
+    console.log('In get location async')
+    let { status } = await Permissions.askAsync(Permissions.LOCATION)
+      .catch(e => console.log('An error occured', e));
+    if (status !== 'granted') {
+      // this.setState({
+      //   errorMessage: '',
+      // });
+      this.showAlert()
+    }
+
+    let location = await Location.getCurrentPositionAsync({}).catch(e => { this.setState({ currentLocation: null }) });
+    this.setState({ currentLocation: location });
+    dispatch({ type: 'SAVE_CURRENT_LOCATION', payload: location })
+    console.log(this.state);
+  };
+
   componentDidMount() {
     const { token, dispatch } = this.props
+
+    this.getLocationAsync()
+
     fetch(`${ipAddress}/users/me`, {
       headers: {
         'x-access-token': token,
@@ -53,7 +88,7 @@ class HomeScreen extends React.Component {
   }
 
   render() {
-   
+
     console.log(this.state)
     const { userData } = this.props
     const { userServices } = this.state
@@ -65,7 +100,7 @@ class HomeScreen extends React.Component {
         <View style={styles.container}>
           {/* <Avatar.Image size={150} source={{ uri: userData.profilePicURL }} />
           <Text style={{ fontStyle: 'italic', fontSize: 25, marginBottom: 15, textAlign: 'center' }}>{userData.name}</Text> */}
-          <Avatar.Image size={200} source={{uri: 'https://facebook.github.io/react-native/docs/assets/favicon.png'}} />
+          <Avatar.Image size={200} source={{ uri: 'https://facebook.github.io/react-native/docs/assets/favicon.png' }} />
           <Text style={{ textAlign: 'left', fontSize: 24, marginTop: 10, marginBottom: 5, color: 'blue', fontWeight: 'bold' }}>My Services</Text>
           <View style={{ height: 200 }}>
             <ScrollView>
@@ -80,7 +115,7 @@ class HomeScreen extends React.Component {
                       </Card.Content>
                       <Card.Cover source={{ uri: val.profilePicURL }} />
                       <Card.Actions style={{ paddingLeft: '72%' }}>
-                        <Button onPress={() => console.log('Card button', index)} color="blue">Order</Button>
+                        <Button onPress={() => console.log('Card button', index)} color="blue">EDIT</Button>
                       </Card.Actions>
                     </Card>
                   }) :
