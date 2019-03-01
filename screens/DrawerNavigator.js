@@ -5,6 +5,8 @@ import { createDrawerNavigator, createAppContainer, DrawerItems, SafeAreaView } 
 import HomeScreen from '../screens/HomeScreen';
 import AddServiceScreen from '../screens/AddService'
 import GetServicesScreen from '../screens/GetServices'
+import MyOrdersScreen from '../screens/MyOrders';
+import OrderRequestScreen from '../screens/OrderRequest'
 
 
 
@@ -21,6 +23,12 @@ const MyDrawerNavigator = createDrawerNavigator(
   },
   GetServices: {
     screen: GetServicesScreen
+  },
+  MyOrders: {
+    screen: MyOrdersScreen
+  },
+  OrderRequest: {
+    screen: OrderRequestScreen
   }
 },
 // { 

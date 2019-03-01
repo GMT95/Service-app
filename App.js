@@ -11,6 +11,7 @@ import SignInScreen from './screens/SignInScreen';
 import DrawerNavigator from './screens/DrawerNavigator';
 import GetServicesScreen from './screens/GetServices';
 import OrderScreen from './screens/OrderScreen';
+import MapScreen from './screens/Map'
 
 class App extends React.Component {
   static navigationOptions = {
@@ -58,7 +59,8 @@ const AppStack = createStackNavigator({
   },
   AddService: AddServiceScreen,
   GetServices: GetServicesScreen,
-  Order: OrderScreen
+  Order: OrderScreen,
+  Map: MapScreen
 }, { initialRouteName: 'Home' });
 const AuthStack = createStackNavigator({ SignIn: App });
 

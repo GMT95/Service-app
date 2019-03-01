@@ -60,7 +60,9 @@ class GetServicesScreen extends Component {
         })
       })
         .then(res => res.json())
-        .then(res2 => this.setState({ categoryData: res2 }))
+        .then(res2 => this.setState({categoryData: res2}))
+        .catch(err => console.log(err))
+
     } else {
       locationBody = {
         type: "Point",
@@ -78,7 +80,8 @@ class GetServicesScreen extends Component {
         })
       })
         .then(res => res.json())
-        .then(res2 => this.setState({ categoryData: res2 }))
+        .then(res2 => this.setState({categoryData: res2}))
+        .catch(err => console.log(err))
     }
 
   }
@@ -96,7 +99,7 @@ class GetServicesScreen extends Component {
   render() {
     const { category, categoryData } = this.state
     console.log('useeeeeeeeeeeeeeer ddddddddddddd', this.props.userData)
-    console.log(categoryData)
+    console.log(categoryData,'~~~~~~~~~~~~~~~~~~~~~~~~~~~121')
     return (
       <View style={styles.container}>
         <Button
@@ -132,12 +135,13 @@ class GetServicesScreen extends Component {
                   <Card.Cover source={{ uri: val.profilePicURL }} />
                   <Card.Actions style={{ paddingLeft: '72%' }}>
                     <Button onPress={() => this.orderData(val)} color="blue">Order</Button>
+                    {console.log(val._id,'*******Service Idz')}
                   </Card.Actions>
                 </Card>
               }) :
               <Title style={{ color: '#EF330A', textAlign: 'center', paddingTop: 20 }}>No Results to Show</Title>
           }
-        </ScrollView>
+        </ScrollView> 
       </View>
     )
   }
