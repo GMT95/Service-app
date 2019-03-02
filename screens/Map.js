@@ -14,7 +14,7 @@ const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
 
 
-const GOOGLE_MAPS_APIKEY = 'AIzaSyCx_-uES-cH5MUvOmR6d8DwhQ4cibpzZlk';
+const GOOGLE_MAPS_APIKEY = 'AIzaSyCYvMpmVhFc0ydILEuXGJNYNGFnBoKPCL8';
 
 class MapScreen extends Component {
   state = {

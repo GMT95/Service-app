@@ -35,6 +35,11 @@ export default (state = {screenChanger: false,userData: null}, action) => {
       ...state,
       orderData: action.payload
     } 
+    case 'SAVE_CHAT_DATA':
+    return {
+      ...state,
+      chatData: action.payload
+    }
     default:
       return state;
   }

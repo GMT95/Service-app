@@ -46,7 +46,7 @@ export class MyOrders extends Component {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        _id: id, 
+        _id: id,
         rejectedBy: 'buyer'
       })
     })
@@ -56,6 +56,13 @@ export class MyOrders extends Component {
         this.getMyOrders()
       })
       .catch(err => console.log(err))
+  }
+
+  openChatScreen(data) {
+    const { dispatch } = this.props
+    dispatch({type: 'SAVE_CHAT_DATA',payload: data})
+    console.log(data);
+    this.props.navigation.navigate('Chat');
   }
 
   render() {
@@ -71,10 +78,15 @@ export class MyOrders extends Component {
                 <Text style={{ textAlign: 'center', fontSize: 16 }}>Status: {val.orderStatus}</Text>
               </Card.Content>
               {/* <Card.Cover source={{ uri: val.profilePicURL }} /> */}
-              <Card.Actions style={{ paddingLeft: '72%' }}>
+              <Card.Actions style={{ paddingLeft: '10%' }}>
                 {
                   val.orderStatus === 'pending' &&
-                  <Button onPress={_ => this.cancelOrder(val._id)} color="red">Cancel</Button>
+                  <>
+                    <Button onPress={_ => this.cancelOrder(val._id)} color="red">Cancel</Button>
+                    {(val.orderStatus === 'pending' || val.orderStatus === 'accepted') &&
+                      <Button onPress={_ => this.openChatScreen(val)} color="lightblue">Chat</Button>
+                    }
+                  </>
                 }
               </Card.Actions>
             </Card>
@@ -91,11 +103,8 @@ const mapStateToProps = (state) => ({
   token: state.authReducer.savedToken
 })
 
-const mapDispatchToProps = {
 
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(MyOrders)
+export default connect(mapStateToProps, null)(MyOrders)
 
 const styles = StyleSheet.create({
   containerStart: {
